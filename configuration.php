@@ -26,8 +26,8 @@ $_config = Array(
 	// 谷歌验证码相关配置
 	'recaptcha' => Array(
 		/* 是否启用 */ 'enable'    => false,
-		/* 前端密钥 */ 'sitekey'   => '6LdYtiwqAAAAAKN6SY534XmZkD0yTZpgueB1Q-Gl',
-		/* 后端密钥 */ 'sitetoken' => '6LdYtiwqAAAAAP9kTrSXGk-OJ9Jk3E0acPlB835c'
+		/* 前端密钥 */ 'sitekey'   => '#',
+		/* 后端密钥 */ 'sitetoken' => '#'
 	),
 	
 	// 签到功能相关配置
@@ -43,19 +43,19 @@ $_config = Array(
 	// 如果服务器需要 SSL，请在主机地址前面加 ssl://
 	'smtp' => Array(
 		/* 是否启用 */ 'enable'    => true,
-		/* 主机地址 */ 'host'      => 'ssl://mail.luochancy.com',
+		/* 主机地址 */ 'host'      => 'ssl://#',
 		/* 主机端口 */ 'port'      => 465,
-		/* 发信账号 */ 'user'      => 'noreply@sytcraft.com',
-		/* 发信密码 */ 'pass'      => 'SYTCraftNoreply2023',
-		/* 发信邮箱 */ 'mail'      => 'noreply@sytcraft.com'
+		/* 发信账号 */ 'user'      => 'noreply@mail.com',
+		/* 发信密码 */ 'pass'      => '#',
+		/* 发信邮箱 */ 'mail'      => 'noreply@mail.com'
 	),
 	
 	// 短信功能相关设置
 	'sms' => Array(
 		/* 是否启用 */ 'enable'    => true,
 		/* 接口地址 */ 'host'      => 'https://api.smsbao.com/sms?',
-		/* 发信账号 */ 'user'      => 'baimiao2534',
-		/* 发信密钥 */ 'pass'      => '157f84315fde4944aeaaa2996ba41608'
+		/* 发信账号 */ 'user'      => '#',
+		/* 发信密钥 */ 'pass'      => '#'
 	),
 	
 	'proxies' => Array(
