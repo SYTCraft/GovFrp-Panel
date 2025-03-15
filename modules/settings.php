@@ -100,7 +100,7 @@ $version = SYTCraftPanel\Settings::get("version");
 						<table class="table table-striped table-valign-middle infotable" style="width: 100%;font-size: 15px;margin-top: 0px;margin-bottom: 0px;">
 							<tr>
 								<th>面板版本</th>
-								<td>v<?php echo $version; ?></td>
+								<td>v<?php echo $version; ?><span id="update-prompt" style="display: none; margin-left: 10px;"></span></td>
 							</tr>
 							<tr>
 								<th>服务软件</th>
@@ -160,6 +160,7 @@ $version = SYTCraftPanel\Settings::get("version");
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 var csrf_token = "<?php echo $_SESSION['token']; ?>";
 function alertMessage(title, body) {
@@ -239,4 +240,65 @@ function preview(data) {
 		}
 	});
 }
+function checkForUpdates() {
+    var script = document.createElement('script');
+    script.src = 'https://frp.api.govfrp.com/api/old.php?callback=handleVersionCheck';
+    document.body.appendChild(script);
+}
+
+function handleVersionCheck(data) {
+    var currentVersion = "<?php echo $version; ?>";
+    if (data.versions && data.versions.includes(currentVersion)) {
+        // 如果版本存在于列表中，检查是否有新版本
+        var script = document.createElement('script');
+        script.src = 'https://frp.api.govfrp.com/api/version.php?callback=handleNewVersion';
+        document.body.appendChild(script);
+    } else {
+        // 如果版本不存在于列表中，提示可能是盗版
+        alertMessage("警告", "你可能是盗版软件的受害者！<br>当前版本: " + currentVersion, 'warning');
+    }
+}
+
+function handleNewVersion(newVersionData) {
+    var currentVersion = "<?php echo $version; ?>";
+    if (newVersionData.version && newVersionData.version !== currentVersion) {
+        // 在右下角显示 Toast 提示
+        Swal.fire({
+            title: '发现新版本',
+            text: '最新版本: ' + newVersionData.version,
+            icon: 'info',
+            toast: true, // 启用 Toast 模式
+            position: 'bottom-end', // 右下角
+            showConfirmButton: false, // 不显示确认按钮
+            timer: 3000, // 3 秒后自动消失
+            timerProgressBar: true // 显示进度条
+        });
+
+        // 在面板版本处显示“发现新版本：版本号”
+        var updatePrompt = document.getElementById('update-prompt');
+        updatePrompt.innerHTML = '发现新版本: ' + newVersionData.version;
+        updatePrompt.style.display = 'inline';
+        updatePrompt.style.cursor = 'pointer';
+        updatePrompt.style.color = 'blue'; // 设置颜色为蓝色
+        updatePrompt.style.textDecoration = 'underline'; // 添加下划线
+
+        // 为提示文本添加点击事件
+        updatePrompt.addEventListener('click', function() {
+            alertMessage("发现新版本", "当前版本: " + currentVersion + "<br>最新版本: " + newVersionData.version);
+        });
+    }
+}
+
+function alertMessage(title, body, icon = 'info') {
+    Swal.fire({
+        title: title,
+        html: body,
+        icon: icon, // 支持 'info', 'warning', 'error', 'success' 等
+        confirmButtonText: '确定'
+    });
+}
+
+$(document).ready(function() {
+    checkForUpdates();
+});
 </script>
